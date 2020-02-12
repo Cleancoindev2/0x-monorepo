@@ -121,6 +121,36 @@ const samplerOperations = {
             },
         };
     },
+    getMedianSellQuote(
+        sources: ERC20BridgeSource[],
+        makerToken: string,
+        takerToken: string,
+        takerFillAmount: BigNumber,
+    ): BatchedOperation<DexSample> {
+        const getSellQuotes = samplerOperations.getSellQuotes(
+            sources,
+            makerToken,
+            takerToken,
+            [takerFillAmount],
+        );
+        return {
+            encodeCall: contract => {
+                const subCalls = [getSellQuotes.encodeCall(contract)];
+                return contract.batchCall(subCalls).getABIEncodedTransactionData();
+            },
+            handleCallResultsAsync: async (contract, callResults) => {
+                const rawSubCallResults = contract.getABIDecodedReturnData<string[]>('batchCall', callResults);
+                const samples = await getSellQuotes.handleCallResultsAsync(contract, rawSubCallResults[0]);
+                const flatSortedSamples = samples
+                    .reduce((acc, v) => acc.concat(...v))
+                    .sort((a, b) => a.output.comparedTo(b.output));
+                if (flatSortedSamples.length === 0) {
+                    throw new Error('Cannot get the median with no samples.');
+                }
+                return flatSortedSamples[Math.floor(flatSortedSamples.length / 2)];
+            },
+        };
+    },
     getSellQuotes(
         sources: ERC20BridgeSource[],
         makerToken: string,

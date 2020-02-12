@@ -164,4 +164,8 @@ export interface GetMarketOrdersOpts {
      * Default: 1.25.
      */
     sampleDistributionBase: number;
+    /**
+     * Fees for each liquidity source, expressed in ETH wei.
+     */
+    fees: { [source: string]: BigNumber };
 }
