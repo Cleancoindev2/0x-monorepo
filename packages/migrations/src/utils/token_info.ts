@@ -25,6 +25,13 @@ export const erc20TokenInfo: ERC20Token[] = [
         swarmHash: NULL_BYTES,
     },
     {
+        name: 'OriginalFutureCarbontest',
+        symbol: 'OFCt',
+        decimals: new BigNumber(18),
+        ipfsHash: NULL_BYTES,
+        swarmHash: NULL_BYTES,
+    },
+    {
         name: 'Dai',
         symbol: 'DAI',
         decimals: new BigNumber(18),

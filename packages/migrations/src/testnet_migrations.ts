@@ -276,8 +276,8 @@ export async function runMigrationsAsync(supportedProvider: SupportedProvider, t
 }
 
 (async () => {
-    const networkId = 1;
-    const rpcUrl = 'https://mainnet.infura.io/v3/';
+    const networkId = 3;
+    const rpcUrl = 'https://mainnet.infura.io/v3/f00afdd7966c406daa092790fac8134e';
     const provider = await providerFactory.getLedgerProviderAsync(networkId, rpcUrl);
     await runMigrationsAsync(provider, { from: '0x3b39078f2a3e1512eecc8d6792fdc7f33e1cd2cf', gasPrice: 10000000001 });
 })().catch(err => {
